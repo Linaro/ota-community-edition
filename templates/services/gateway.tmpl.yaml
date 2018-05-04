@@ -15,13 +15,20 @@ data:
       ssl_verify_depth 10;
       ssl_client_certificate /etc/ssl/gateway/ca.crt;
 
-      if ($ssl_client_s_dn ~ "CN=(.*)$") {
+      if ($ssl_client_s_dn ~ "^CN=(.*)$") {
         set $deviceUuid $1;
+        set $deviceNamespace "default";
       }
-      if ($ssl_client_s_dn !~ "CN=(.*)$") {
-        set $deviceUuid $ssl_client_s_dn;
+      if ($ssl_client_s_dn ~ "OU=(premerge|postmerge|release),CN=(.*)$") {
+        set $deviceNamespace $1;
+        set $deviceUuid $2;
       }
-      set $deviceNamespace "default";
+      if ($deviceNamespace = "release") {
+        set $deviceNamespace "default";
+      }
+      if ($deviceNamespace = "") {
+        return 403 "Invalid device DN: $ssl_client_s_dn";
+      }
 
       location /treehub/ {
         rewrite ^/treehub/(.*)$ /api/v2/$1 break;
