@@ -45,7 +45,7 @@ spec:
         image: {{ .init_docker_image }}
         command: ["sh", "-c", "chown --recursive 2:2 /treehub-objects"]
         volumeMounts:
-        - name: treehub-claim
+        - name: infra-vol
           mountPath: /treehub-objects
       {{- end}}
       containers:
@@ -72,13 +72,12 @@ spec:
             path: "/health"
       {{- if eq .treehub_storage "local"}}
         volumeMounts:
-        - name: treehub-claim
+        - name: infra-vol
           mountPath: /treehub-objects
-          subPath: treehub-objects
       {{- end}}
   volumeClaimTemplates:
   - metadata:
-      name: treehub-claim
+      name: infra-vol
       annotations:
         volume.beta.kubernetes.io/storage-class: {{ .storage_class_name }}
     spec:

@@ -89,12 +89,12 @@ spec:
             cpu: {{ .kafka_cpu }}
             memory: {{ .kafka_mem }}
         volumeMounts:
-        - name: kafka-claim
+        - name: infra-vol
           mountPath: /opt/kafka/data
           subPath: kafka
   volumeClaimTemplates:
   - metadata:
-      name: kafka-claim
+      name: infra-vol
       annotations:
         volume.beta.kubernetes.io/storage-class: {{ .storage_class_name }}
     spec:

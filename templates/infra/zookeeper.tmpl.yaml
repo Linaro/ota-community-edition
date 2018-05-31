@@ -73,12 +73,12 @@ spec:
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         volumeMounts:
-        - name: zookeeper-claim
+        - name: infra-vol
           mountPath: /var/lib/zookeeper
           subPath: zookeeper
   volumeClaimTemplates:
   - metadata:
-      name: zookeeper-claim
+      name: infra-vol
       annotations:
         volume.beta.kubernetes.io/storage-class: {{ .storage_class_name }}
     spec:
