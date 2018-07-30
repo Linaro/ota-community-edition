@@ -21,6 +21,9 @@ spec:
         image: opensourcefoundries/oauthful
         ports:
         - containerPort: 8000
+        env:
+        - name: USER_MODULE
+          value: oauthful.user:FauxUser
 ---
 
 apiVersion: v1
